@@ -1,0 +1,18 @@
+{
+    "name": "BikeStore Theme",
+    "dataColors": [
+        "#0074D9",
+        "#2ECC40",
+        "#FFDC00",
+        "#FF4136",
+        "#7FDBFF",
+        "#B10DC9",
+        "#3D9970",
+        "#FF851B",
+        "#AAAAAA",
+        "#111111"
+    ],
+    "background": "#FFFFFF",
+    "foreground": "#111111",
+    "tableAccent": "#0074D9"
+}
