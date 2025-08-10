@@ -19,19 +19,21 @@ FROM [Sales].[Order]
 
 -- ANALISES VISÃO GERAL DO NÉGÓCIO
 
--- Faturamento total por mês e ano
+-- Faturamento total por ano
 SELECT
 	YEAR(SO.OrderDate) ANO,
-	MONTH(SO.OrderDate) MÊS,
 	FORMAT(SUM(SO.OrderTotal),'C','pt-BR') TOTAL_VENDAS
 FROM [Sales].[Order] AS SO
-GROUP BY YEAR(SO.OrderDate),MONTH(SO.OrderDate)
-ORDER BY ANO, MÊS ASC
+GROUP BY YEAR(SO.OrderDate)
+ORDER BY ANO ASC
+
 
 -- Quantidade de Pedidos
 SELECT
 	COUNT(SO.OrderID) QTD_PEDIDOS
 FROM [Sales].[Order] AS SO
+
+
 
 -- Número total de clientes distintos
 
@@ -94,6 +96,7 @@ AS
 SELECT
 	FORMAT(AVG(MEDIA_VENDAS),'C','pt-BR') AS MEDIA_VENDAS_CLIENTES
 FROM VENDAS_POR_CLIENTE AS VC
+
 
 -- ticket médio
 
@@ -158,6 +161,7 @@ GROUP BY B.BrandID, B.Name
 ORDER BY TOTAL_VENDAS DESC
 
 
+-- Produtos que não Venderam
 SELECT
     P.ProductID,
     P.Name,
@@ -220,12 +224,10 @@ WHERE SO.EmployeeID IS NULL;
 
 -- Evolução mensal das vendas por loja
  --Agrupar as vendas por loja e por mês.
-
  SELECT
 	YEAR(SO.OrderDate) ANO,
-	MONTH(SO.OrderDate) MES,
 	S.Name,
 	SUM(SO.OrderTotal) TOTAL_VENDAS
  FROM [Sales].[Order] AS SO
  INNER JOIN Sales.Store AS S ON S.StoreID = SO.StoreID
- GROUP BY YEAR(SO.OrderDate) ,MONTH(SO.OrderDate),S.Name
+ GROUP BY YEAR(SO.OrderDate) ,S.Name
