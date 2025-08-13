@@ -44,7 +44,20 @@ Com os dados importados, foi feito o tratamento e modelagem no Power BI, respeit
 *   Receita por Funcionário
 *   Média de gasto por Cliente
 
-Também foram criadas colunas calculadas para facilitar o uso de datas e filtros.
+##### Medida: Maior Receita Mensal
+  ![MaiorReceitaMensal](https://github.com/NascimentoVitorDEV/BikeStoreRepositorio/blob/main/Imagens/ImagensDashboard/MedidaMaiorReceitaMensal.png)
+
+##### Medida: Top 10 Produtos
+  ![Top10produtos](https://github.com/NascimentoVitorDEV/BikeStoreRepositorio/blob/main/Imagens/ImagensDashboard/Top10Produtos.png)
+
+##### Medida: Categoria Top 1
+  ![Categoriatop1](https://github.com/NascimentoVitorDEV/BikeStoreRepositorio/blob/main/Imagens/ImagensDashboard/MedidaCategoriatop1.png)
+
+##### Medida: Receita MoM
+  ![ReceitaMoMl](https://github.com/NascimentoVitorDEV/BikeStoreRepositorio/blob/main/Imagens/ImagensDashboard/ReceitaMOM.png)
+
+##### Medida: Variação % MoM
+  ![Variação MoM](https://github.com/NascimentoVitorDEV/BikeStoreRepositorio/blob/main/Imagens/ImagensDashboard/ReceitaMOM.png)
 
 #### 3. Construção do Dashboard
 
@@ -56,6 +69,22 @@ O dashboard foi construído com foco em interatividade, clareza e apoio à decis
 *   Drill Through das Vendas: análise detalhada de uma venda.
 *   Filtros Flutuantes: seleção por ano, mês, loja, categoria etc.
 *   Tooltips customizados: insights adicionais ao passar o cursor.
+
+  ##### Aba sobre o Resumo Financeiro
+  ![Resumo Financeiro](https://github.com/NascimentoVitorDEV/BikeStoreRepositorio/blob/main/Imagens/ImagensDashboard/PrimeiraPg.png)
+
+##### Aba sobre o painel Financeiro com Painel de Filtros
+  ![Painel de Filtros](https://github.com/NascimentoVitorDEV/BikeStoreRepositorio/blob/main/Imagens/ImagensDashboard/PrimeiraPgFiltro.png)
+
+##### Aba Funcionários
+  ![Funcionários](https://github.com/NascimentoVitorDEV/BikeStoreRepositorio/blob/main/Imagens/ImagensDashboard/SegundaPg.png)
+
+##### Aba Lojas
+  ![Lojas](https://github.com/NascimentoVitorDEV/BikeStoreRepositorio/blob/main/Imagens/ImagensDashboard/TeceiraPg.png)
+
+##### Aba Produtos e Categorias
+  ![Produtos e Categorias](https://github.com/NascimentoVitorDEV/BikeStoreRepositorio/blob/main/Imagens/ImagensDashboard/QuartaPagina.png)
+
 #### Links Para o Deshboard
 <p>
 📊 <a href="https://app.powerbi.com/view?r=eyJrIjoiNGM4OWRkYmYtNDgyZS00ZGRkLWI1NDMtODU5OGI2M2JjOTg1IiwidCI6IjY1OWNlMmI4LTA3MTQtNDE5OC04YzM4LWRjOWI2MGFhYmI1NyJ9" target="_blank">Visualizar Dashboard no Power BI</a>
@@ -256,60 +285,56 @@ WHERE SO.EmployeeID IS NULL;
 
 ## Resultados e Insights
 
-Com base nas análises detalhadas da base de dados Sakila, os seguintes resultados e insights foram identificados, fundamentados nos dados extraídos e visualizados:
+A análise da base BIKEStore gerou informações relevantes para o entendimento do negócio, abrangendo vendas, produtos e desempenho por loja:
 
-###  Receita ao Longo do Tempo: Sazonalidade e Crescimento
+### Evolução Anual de Vendas
+Entre 2009 e 2019, o faturamento total apresentou oscilações significativas.
+O pico ocorreu em 2009, com aproximadamente R$ 375 milhões, seguido de uma queda acentuada em anos posteriores, chegando a R$ 1,8 milhão em 2018, antes de uma recuperação para R$ 10,3 milhões em 2019.
 
-A análise temporal da receita (`AnaliseTempo.png`) revela uma clara sazonalidade e um crescimento significativo no faturamento da locadora. Observa-se um aumento notável da receita de **maio a julho de 2005**, com os pagamentos saltando de **R$ 4.823,44 em maio** para **R$ 28.368,91 em julho**. Embora haja uma leve queda em agosto (R$ 24.070,14), o ano de 2006 inicia com um valor menor em fevereiro (R$ 514,18), indicando que o período de alta performance se concentra nos meses de verão. Essa tendência sugere a importância de estratégias de marketing e estoque focadas nesses meses de pico para maximizar os lucros.
+### Base de Clientes
+A empresa atendeu 1.445 clientes distintos no período analisado.
 
-### Categorias Mais Lucrativas: O Foco da Demanda
+### Volume de Pedidos
+Foram registrados 126.192 pedidos ao longo do histórico de vendas.
 
-As categorias de filmes com maior rendimento (`CategoriasComMaiorRendimento.png`) são cruciais para o negócio. As três categorias que geraram a maior receita são:
+### Comportamento de Compra
 
-*   **Sports:** R$ 5.314,21
-*   **Sci-Fi:** R$ 4.756,98
-*   **Animation:** R$ 4.656,30
+Gasto médio por cliente: R$ 7.336,30
 
-Esses dados reforçam que filmes de ação, ficção científica e animação são os pilares da receita da locadora, indicando onde o investimento em novos títulos e promoções deve ser prioritário.
+Ticket médio por pedido: R$ 7.351,30
 
-### Top 10 Filmes Mais Alugados: Os Blockbusters da Locadora
+### Produtos Mais Vendidos
 
-Os dez filmes mais alugados (`Top10FilmesMaisAlugados.png`) demonstram a concentração da demanda em títulos específicos. Os líderes em quantidade de aluguéis são:
+Destaque para Trek Slash 8 27.5 - 2005, responsável por mais de R$ 67 milhões em vendas.
 
-*   **BUCKET BROTHERHOOD:** 34 aluguéis
-*   **ROCKETEER MOTHER:** 33 aluguéis
-*   **FORWARD TEMPLE:** 32 aluguéis
+Outros produtos de alto desempenho incluem Trek Conduit+ 2005 e Trek Fuel EX 8 29 - 2005.
 
-Manter um estoque robusto desses filmes é essencial para atender à demanda e evitar perdas de vendas. Estratégias para promover filmes menos populares ou de outras categorias podem ajudar a diversificar a receita.
+### Categorias de Produtos
 
-### Categorias com Maior Rendimento
+Mountain Bikes: R$ 340 milhões
 
-A análise das categorias de filmes revelou quais gêneros são os mais lucrativos para a locadora. Conforme os dados, as categorias que geraram maior receita são:
+Road Bicycles: R$ 202 milhões
 
-*   **Sports:** R$ 5.314,21
-*   **Sci-Fi:** R$ 4.756,98
-*   **Animation:** R$ 4.656,30
+Cruisers Bicycles: R$ 116 milhões
+As Mountain Bikes lideram com ampla margem.
 
-Esses resultados indicam que filmes de **Esporte**, **Ficção Científica** e **Animação** são os que mais contribuem para o faturamento. Este insight é fundamental para direcionar a aquisição de novos títulos e o foco das campanhas de marketing, garantindo que a oferta esteja alinhada com a demanda e o potencial de receita.
+### Marcas com Maior Receita
 
-### Performance das Lojas: Comparativo de Desempenho
+Trek: R$ 551 milhões
 
-A análise de desempenho por loja (`DesempenhoPorLoja.png` e `Regiaão.png`) revela que a **Loja 2 (Woodridge, Austrália)** gerou uma receita ligeiramente superior de **R$ 33.726,77** com 8.121 aluguéis e um ticket médio de R$ 4,15. Já a **Loja 1 (Lethbridge, Canadá)** obteve **R$ 33.679,79** em receita com 7.923 aluguéis e um ticket médio de R$ 4,25. Embora os valores totais sejam próximos, a Loja 1 apresenta um ticket médio ligeiramente maior, indicando que, em média, seus clientes gastam um pouco mais por aluguel. Essa pequena diferença pode ser explorada para entender as práticas que levam a um ticket médio mais alto.
+Electra: R$ 131 milhões
 
-### Funcionários com Maior Receita Gerada: Reconhecimento e Benchmarking
+Surly: R$ 117 milhões
 
-O desempenho dos funcionários (`DesempenhoPorFuncionário.png`) mostra que **Jon** gerou **R$ 33.924,06** em aluguéis, enquanto **Mike** gerou **R$ 33.482,50**. Essa proximidade nos valores indica uma performance equilibrada entre os dois principais funcionários. A análise individual pode ser aprofundada para identificar as melhores práticas de cada um e aplicá-las em treinamentos para otimizar o atendimento e as vendas.
+### Produtos Sem Vendas
+Identificados diversos modelos que não registraram vendas no período, incluindo Electra Savannah 1 (20inch) - Girl’s - 2007 e Trek Checkpoint ALR 5 Women’s - 2008.
 
-### Comportamento dos Clientes: Identificando e Fidelizando
+### Desempenho por Loja
 
-Duas análises complementares sobre o comportamento do cliente foram realizadas:
+Baldwin Bikes: R$ 637 milhões (86.048 pedidos, ticket médio R$ 7.339,95)
 
-*   **Clientes Mais Ativos por Quantidade de Aluguéis** (`ClientesMaisAtivos.png`): **ELEANOR** (46 aluguéis), **KARL** (45 aluguéis) e **CLARA** (42 aluguéis) são os clientes que mais alugam filmes. Esses clientes representam a base de usuários mais engajada.
-*   **Clientes que Mais Pagaram Aluguel** (`ClientesMaisPagaram.png`): **KARL** (R$ 221,55), **ELEANOR** (R$ 216,54) e **CLARA** (R$ 195,58) são os que mais contribuíram para a receita. É interessante notar que os clientes mais ativos por quantidade de aluguéis também são os que mais pagam, reforçando a importância de programas de fidelidade e reconhecimento para esses clientes VIP.
+Santa Cruz Bikes: R$ 190 milhões (25.856 pedidos, ticket médio R$ 7.349,29)
 
-### Ticket Médio por Cliente: Valor da Transação Individual
-
-O valor médio pago por cliente (`ValorMedioPorClient.png`) oferece uma visão sobre o gasto individual. Embora a imagem mostre o total de aluguéis e o valor médio, o foco aqui é o valor médio por cliente. Por exemplo, **ANA** tem um valor médio de **R$ 5,14**, enquanto **KARL** tem **R$ 4,92**. Essa métrica é fundamental para segmentar clientes e criar ofertas personalizadas que incentivem um maior gasto por aluguel.
-
+Rowlett Bikes: R$ 100 milhões (13.488 pedidos, ticket médio R$ 7.428,19)
 
 
