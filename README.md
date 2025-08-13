@@ -63,141 +63,196 @@ O dashboard foi construído com foco em interatividade, clareza e apoio à decis
 
 ### Análises
 
-##### Desempenho por Loja e por Funcionário
+##### Faturamento Anual
 
 ```sql
--- DESEMPENHO POR LOJA
+-- FATURAMENTO TOTAL POR ANO
 SELECT
-S.store_id,
-Sum(P.amount) TOTALALUGUEIS
-FROM store AS S
-INNER JOIN staff AS SF ON SF.store_id = S.store_id
-INNER JOIN payment AS P ON P.staff_id = SF.staff_id
-GROUP BY S.store_id
-ORDER BY S.store_id;
-
--- DESEMPENHO POR FUNCIONARIO
-SELECT
-SF.staff_id,
-SF.first_name,
-SUM(P.amount) TOTALALUGUEIS
-FROM staff AS SF
-INNER JOIN payment AS P ON P.staff_id = SF.staff_id
-GROUP BY SF.staff_id, SF.first_name;
+	YEAR(SO.OrderDate) ANO,
+	FORMAT(SUM(SO.OrderTotal),'C','pt-BR') TOTAL_VENDAS
+FROM [Sales].[Order] AS SO
+GROUP BY YEAR(SO.OrderDate)
+ORDER BY ANO ASC;
 ```
 
-![Desempenho por Loja e por Funcionário](https://github.com/NascimentoVitorDEV/ProjetoSakila/blob/main/Imagens/DesempenhoPorFuncion%C3%A1rio.png)
-![Desempenho por Funcionário](https://github.com/NascimentoVitorDEV/ProjetoSakila/blob/main/Imagens/DesempenhoPorLoja.png)
+![Faturamento total anual](https://github.com/NascimentoVitorDEV/BikeStoreRepositorio/blob/main/Imagens/ConsultasSql/FaturamentoAnual.png)
 
-##### Top 10 Filmes Mais Alugados e Clientes que Mais Alugam
+##### Quantidade de Pedidos
 
 ```sql
--- TOP 10 FILMES MAIS ALUGADOS
+-- Quantidade de Pedidos
 SELECT
-F.film_id,
-F.title,
-COUNT(R.rental_id) QUANTIDADE_ALUGUEL
-FROM film AS F
-INNER JOIN inventory AS I ON I.film_id = F.film_id
-INNER JOIN rental AS R ON R.inventory_id = I.inventory_id
-GROUP BY F.film_id, F.title
-ORDER BY QUANTIDADE_ALUGUEL DESC
-LIMIT 10;
-
--- Clientes que mais alugam FILMES
-SELECT
-C.customer_id,
-C.first_name,
-COUNT(R.rental_id) QUANTIDADEALUGUEIS
-FROM rental AS R
-INNER JOIN customer AS C ON C.customer_id = R.customer_id
-GROUP BY C.customer_id, C.first_name
-ORDER BY QUANTIDADEALUGUEIS DESC
-LIMIT 10;
+	COUNT(SO.OrderID) QTD_PEDIDOS
+FROM [Sales].[Order] AS SO;
 ```
 
-![Top 10 Filmes Mais Alugados e Clientes que Mais Alugam](https://github.com/NascimentoVitorDEV/ProjetoSakila/blob/main/Imagens/Top10Filmes%20MaisAlugados.png)
-![Top 10 Filmes Mais Alugados e Clientes que Mais Alugam](https://github.com/NascimentoVitorDEV/ProjetoSakila/blob/main/Imagens/ClientesMaisAtivos.png)
+![Quantidade de Pedidos](https://github.com/NascimentoVitorDEV/BikeStoreRepositorio/blob/main/Imagens/ConsultasSql/Pedidos.png)
 
-##### Clientes que Mais Pagaram Aluguel
+##### Clientes Distintos
 
 ```sql
--- clientes que mais pagaram aluguel
-SELECT
-C.customer_id,
-C.first_name,
-SUM(P.amount) TOTALALUGUEIS
-FROM payment AS P
-INNER JOIN customer AS C ON C.customer_id = P.customer_id
-ORDER BY TOTALALUGUEIS DESC
-LIMIT 10;
+-- Número total de clientes distintos
+
+SELECT DISTINCT
+	
+	COUNT(DISTINCT SO.CustomerID) QTD_CLIENTES
+
+FROM [Sales].[Order] AS SO
+;
 
 ```
+![Clientes Distintos](https://github.com/NascimentoVitorDEV/BikeStoreRepositorio/blob/main/Imagens/ConsultasSql/Clientes.png)
 
-![Clientes que Mais Pagaram Aluguel e Região com Maior Número de Aluguéis](https://github.com/NascimentoVitorDEV/ProjetoSakila/blob/main/Imagens/ClientesMaisPagaram.png)
-
-##### Lojas que Geram Mais Receita e Onde Estão Localizadas
+##### Top 10 produtos mais vendidos
 
 ```sql
--- Lojas que geram mais receita e onde estão localizadas
-SELECT
-S.store_id,
-CI.city,
-CO.country,
-SUM(P.amount) AS TOTAL_RECEITA,
-COUNT(R.rental_id) AS QTD_ALUGUEIS,
-AVG(P.amount) AS TICKET_MEDIO
-FROM payment AS P
-JOIN rental AS R ON R.rental_id = P.rental_id
-JOIN inventory AS I ON I.inventory_id = R.inventory_id
-JOIN store AS S ON S.store_id = I.store_id
-JOIN address AS A ON S.address_id = A.address_id
-JOIN city AS CI ON A.city_id = CI.city_id
-JOIN country AS CO ON CI.country_id = CO.country_id
-GROUP BY S.store_id, CI.city, CO.country
-ORDER BY TOTAL_RECEITA DESC;
+-- TOP 10 produtos mais vendidos por valor e quantidade
+
+SELECT TOP 10
+	SI.ProductID,
+	P.Name,
+	SUM(SI.Quantity) QTD_PRODUTOS,
+	AVG(SI.LineTotal / SI.Quantity) AS PRECO_MEDIO_UNITARIO,
+	SUM(SI.LineTotal) TOTAL_PRECO
+FROM [Sales].[Order] SO
+INNER JOIN Sales.OrderItem AS SI ON SI.OrderID = SO.OrderID
+INNER JOIN Production.Product AS P ON P.ProductID = SI.ProductID
+GROUP BY SI.ProductID, P.Name
+ORDER BY TOTAL_PRECO DESC;
 ```
 
-![Lojas que Geram Mais Receita e Onde Estão Localizadas](https://github.com/NascimentoVitorDEV/ProjetoSakila/blob/main/Imagens/Regia%C3%A3o.png)
+![Top10](https://github.com/NascimentoVitorDEV/BikeStoreRepositorio/blob/main/Imagens/ConsultasSql/TopProdutos.png)
 
-##### Categorias com Maior Rendimento
+##### Media de Pagamento por Cliente
 
 ```sql
-SELECT
+-- “Em média, quanto cada cliente gasta por pedido?"
+	--  Calcular a média de valor total gasto por cliente.
 
-    FC.category_id,
-    C.name,
-    SUM(P.amount) TOTAL_ALUGUEIS
-    
-FROM film  AS F
-INNER JOIN film_category AS FC ON FC.film_id = F.film_id
-INNER JOIN category AS C ON C.category_id = FC.category_id
-INNER JOIN inventory AS I ON I.film_id = F.film_id
-INNER JOIN rental AS R ON R.inventory_id = I.inventory_id
-INNER JOIN payment AS P ON P.rental_id = R.rental_id
-GROUP BY  FC.category_id, C.name
-ORDER BY  FC.category_id ASC;
+WITH VENDAS_POR_CLIENTE (CLIENTES, MEDIA_VENDAS)
+AS
+(
+	SELECT
+		SO.CustomerID AS CLIENTES,
+		AVG(SO.OrderTotal) AS MEDIA_VENDAS
+	FROM [Sales].[Order]  AS SO
+	GROUP BY SO.CustomerID
+)
+SELECT
+	FORMAT(AVG(MEDIA_VENDAS),'C','pt-BR') AS MEDIA_VENDAS_CLIENTES
+FROM VENDAS_POR_CLIENTE AS VC;
 
 ```
 
-![Categorias que mais alugam](https://github.com/NascimentoVitorDEV/ProjetoSakila/blob/main/Imagens/CategoriasComMaiorRendimento.png)
+![Media pagamento cliente](https://github.com/NascimentoVitorDEV/BikeStoreRepositorio/blob/main/Imagens/ConsultasSql/VendasPorClientes.png)
 
-##### AnáliseTemporal
+##### Ticket Médio
 
 ```sql
-SELECT
-	YEAR(P.payment_date) ANO,
-    MONTH(P.payment_date) MES,
-	SUM(P.amount) AS PAGAMENTOS
-FROM payment AS P
-GROUP BY YEAR(P.payment_date), MONTH(P.payment_date)
-ORDER BY ANO, MES;
+-- ticket médio
+
+SELECT 
+  FORMAT(
+    SUM(OrderTotal) * 1.0 / COUNT(OrderID),
+    'C', 'pt-BR'
+  ) AS TICKET_MEDIO
+FROM Sales.[Order];
 
 
 ```
 
-![AnáliseAoLongodoTempo](https://github.com/NascimentoVitorDEV/ProjetoSakila/blob/main/Imagens/AnaliseTempo.png)
+![Ticket medio](https://github.com/NascimentoVitorDEV/BikeStoreRepositorio/blob/main/Imagens/ConsultasSql/TicketM%C3%A9dio.png)
 
+##### Vendas Por Categoria
+
+```sql
+-- Vendas Por categorias 
+SELECT
+	C.CategoryID,
+	C.Name,
+	SUM(SI.LineTotal) TOTAL_VENDAS
+FROM Sales.OrderItem AS SI
+INNER JOIN Production.Product AS P ON P.ProductID = SI.ProductID
+INNER JOIN Production.Category AS C ON C.CategoryID = P.CategoryID
+GROUP BY C.CategoryID,C.Name
+ORDER BY TOTAL_VENDAS DESC;
+```
+![Vendas por Categoria](https://github.com/NascimentoVitorDEV/BikeStoreRepositorio/blob/main/Imagens/ConsultasSql/VendasPorCategoria.png)
+
+##### Vendas Por Marca
+
+```sql
+-- vendas por Marca
+SELECT
+	B.BrandID,
+	B.Name,
+	SUM(SI.LineTotal) TOTAL_VENDAS
+FROM Sales.OrderItem AS SI
+INNER JOIN Production.Product AS P ON P.ProductID = SI.ProductID
+INNER JOIN Production.Brand AS B ON B.BrandID = P.BrandID
+GROUP BY B.BrandID, B.Name
+ORDER BY TOTAL_VENDAS DESC
+;
+```
+![Vendas por Marca](https://github.com/NascimentoVitorDEV/BikeStoreRepositorio/blob/main/Imagens/ConsultasSql/VendasPorMarca.png)
+
+##### Produtos Sem Faturamento
+
+```sql
+-- Produtos que não Venderam
+SELECT
+    P.ProductID,
+    P.Name,
+    P.ListPrice
+FROM Production.Product P
+LEFT JOIN Sales.OrderItem SI ON SI.ProductID = P.ProductID
+WHERE SI.ProductID IS NULL;
+```
+![Produtos que nao Venderam](https://github.com/NascimentoVitorDEV/BikeStoreRepositorio/blob/main/Imagens/ConsultasSql/ProdutosNaoVendidos.png)
+
+##### Vendas Por Loja
+
+```sql
+SELECT
+	SO.StoreID,
+	SS.Name,
+	ROUND(SUM(SO.OrderTotal) * 1.0 / COUNT(SO.OrderID), 2) AS TICKET_MEDIO,
+	SUM(SO.OrderTotal) TOTAL_VENDAS,
+	COUNT(SO.OrderID) QTD_PEDIDOS
+FROM [Sales].[Order] AS SO
+INNER JOIN Sales.Store AS SS ON SS.StoreID = SO.StoreID
+GROUP BY SO.StoreID, SS.Name
+ORDER BY TOTAL_VENDAS DESC;
+```
+![Vendas por Loja](https://github.com/NascimentoVitorDEV/BikeStoreRepositorio/blob/main/Imagens/ConsultasSql/ReceitaPorLoja.png)
+
+##### Vendas Por Funcionário
+
+```sql
+SELECT
+	SO.EmployeeID,
+	CONCAT(SE.FirstName,' ', SE.LastName) AS FullName,
+	ROUND(SUM(SO.OrderTotal) * 1.0 / COUNT(SO.OrderID), 2) AS TICKET_MEDIO,
+	COUNT(OrderID) QTD_PEDIDOS,
+	SUM(SO.OrderTotal) TOTAL_VENDAS
+FROM [Sales].[Order] AS SO
+INNER JOIN Sales.Employee AS SE ON SE.EmployeeID = SO.EmployeeID
+GROUP BY SO.EmployeeID, CONCAT(SE.FirstName,' ', SE.LastName);
+```
+![Vendas por Funcionario](https://github.com/NascimentoVitorDEV/BikeStoreRepositorio/blob/main/Imagens/ConsultasSql/VendasPorFuncionario.png)
+
+##### Funcionários sem Faturamento
+
+```sql
+-- Funcionários sem registros de vendas
+SELECT
+    SE.EmployeeID,
+    CONCAT(SE.FirstName, ' ', SE.LastName) AS FullName
+FROM Sales.Employee AS SE
+LEFT JOIN Sales.[Order] AS SO ON SE.EmployeeID = SO.EmployeeID
+WHERE SO.EmployeeID IS NULL;
+```
+![Fucinarios sem faturamento](https://github.com/NascimentoVitorDEV/BikeStoreRepositorio/blob/main/Imagens/ConsultasSql/FuncionariosSemVendas.png)
 
 ## Resultados e Insights
 
