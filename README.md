@@ -73,7 +73,7 @@ O dashboard foi construído com foco em interatividade, clareza e apoio à decis
   ##### Aba sobre o Resumo Financeiro
   ![Resumo Financeiro](https://github.com/NascimentoVitorDEV/BikeStoreRepositorio/blob/main/Imagens/ImagensDashboard/PrimeiraPg.png)
 
-##### Aba sobre o painel Financeiro com Painel de Filtros
+##### Aba sobre o painel Financeiro com Menu de Filtros
   ![Painel de Filtros](https://github.com/NascimentoVitorDEV/BikeStoreRepositorio/blob/main/Imagens/ImagensDashboard/PrimeiraPgFiltro.png)
 
 ##### Aba Funcionários
